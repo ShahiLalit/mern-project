@@ -2,13 +2,19 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 8888;
 
+// Require -->  bodyParser
+const bodyParser = require('body-parser');
+
+// bodyParser Middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 // Requiring Routes
 const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
 
 const mongoose = require('mongoose');
-
 // DB Config
 const db = require('./config/keys.json').mongoURI;
 
