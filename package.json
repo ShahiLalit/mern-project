@@ -1,0 +1,30 @@
+{
+  "name": "developers-social-network",
+  "version": "1.0.0",
+  "description": "Developers can connect to each other",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/LalitInbe/mern-project.git"
+  },
+  "author": "Lalit Singh Shahi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/LalitInbe/mern-project/issues"
+  },
+  "homepage": "https://gitlab.com/LalitInbe/mern-project#README",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "gravatar": "^1.6.0",
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "^5.3.0",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "validator": "^10.8.0"
+  }
+}
