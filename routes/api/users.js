@@ -6,6 +6,9 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
 
+// Load Input Validation
+const validateRegisterInput = require('../../validation/register');
+
 // Load User Model
 const User = require('./../../models/User');
 
@@ -17,12 +20,20 @@ router.get('/test', (req, res) => res.json({ msg: 'Users Route Works!' }));
 // @route   POST /api/users/register
 // @desc    Registering Users Route
 // @access  Public
-router.post('/register', (req, res) =>
+router.post('/register', (req, res) => {
+  const { errors, isValid } = validateRegisterInput(req.body);
+
+  // Check Validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   User.findOne({ email: req.body.email })
     .then(user => {
+      // Check for user
       if (user) {
-        // Check for user
-        return res.status(400).json({ email: 'Email Already Exists' });
+        errors.email = 'Email Already Exists';
+        return res.status(400).json(errors);
       }
       // Load user avatar using gravatar
       const avatar = gravatar.url(req.body.email, {
@@ -50,8 +61,8 @@ router.post('/register', (req, res) =>
         });
       });
     })
-    .catch(err => console.log(err))
-);
+    .catch(err => console.log(err));
+});
 
 // @route   POST /api/users/login
 // @desc    Users Login Route == Returning JWT Token
