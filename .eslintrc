@@ -54,7 +54,7 @@
     "no-sparse-arrays": 2,
     "no-template-curly-in-string": 2,
     "no-undef": 2,
-    "no-use-before-define": [2, {"functions": false}],
+    "no-use-before-define": [2, { "functions": false }],
     "no-useless-computed-key": 2,
     "no-useless-constructor": 2,
     "no-useless-rename": 2,
@@ -73,8 +73,8 @@
     "spaced-comment": 2
   },
   "extends": [
+    "plugin:react/recommended",
     "eslint:recommended",
-    "plugin:prettier/recommended",
-    "plugin:react/recommended"
+    "plugin:prettier/recommended"
   ]
 }
