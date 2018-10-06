@@ -13,6 +13,9 @@ const validateLoginInput = require('../../validation/login');
 // Load User Model
 const User = require('./../../models/User');
 
+// Load Profile Model
+const Profile = require('./../../models/Profile');
+
 // @route   GET /api/users/test
 // @desc    Testing Users Route
 // @access  Public
@@ -128,6 +131,32 @@ router.get(
       name: req.user.name,
       email: req.user.email
     });
+  }
+);
+
+// @route   GET /api/users
+// @desc    Return All Users
+// @access  Public
+router.get('/', (req, res) => {
+  User.find()
+    .then(users => res.status(200).json(users))
+    .catch(err => res.status(404).json(err));
+});
+
+// @route   DELETE /api/users
+// @desc    Delete Users and their Profiles
+// @access  Private
+router.delete(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Profile.findOneAndRemove({ user: req.user.id })
+      .then(() =>
+        User.findOneAndRemove({ _id: req.user.id }).then(() =>
+          res.status(200).json({ success: true })
+        )
+      )
+      .catch(err => res.status(404).json(err));
   }
 );
 
