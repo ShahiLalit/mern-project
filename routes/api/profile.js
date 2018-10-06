@@ -1,16 +1,15 @@
 const express = require('express');
 const router = new express.Router();
-// const mongoose = require('mongoose');
 const passport = require('passport');
 
 // Load Profile Field validation
 const validateProfileInput = require('./../../validation/profile');
 
+// Load Experience Field validation
+const validateExperienceInput = require('./../../validation/experience');
+
 // Load Profile Model
 const Profile = require('./../../models/Profile');
-
-// Load User Model
-// const User = require('./../../models/User');
 
 // @route   GET /api/profile/test
 // @desc    Testing Profile Route
@@ -184,6 +183,38 @@ router.post(
             .then(profile => res.status(200).json(profile));
         });
       }
+    });
+  }
+);
+
+// @route   POST /api/profile/experience
+// @desc    Add User Experience
+// @access  Private
+router.post(
+  '/experience',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validateExperienceInput(req.body);
+
+    // Check Validation
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      const newExp = {
+        title: req.body.title,
+        company: req.body.company,
+        location: req.body.location,
+        from: req.body.from,
+        to: req.body.to,
+        current: req.body.current,
+        description: req.body.description
+      };
+
+      // Add to Profile Collection but at the  beginning of the array.
+      profile.experience.unshift(newExp);
+
+      profile.save().then(profile => res.status(200).json(profile));
     });
   }
 );
