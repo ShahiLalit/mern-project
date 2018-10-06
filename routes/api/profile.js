@@ -39,6 +39,63 @@ router.get(
   }
 );
 
+// @route   GET /api/profile/all
+// @desc    Get all Profile
+// @access  Public
+router.get('/all', (req, res) => {
+  const errors = {};
+
+  Profile.find()
+    .populate('user', ['name', 'avatar'])
+    .then(profiles => {
+      if (!profiles) {
+        errors.profile = 'There are no Profiles.';
+        res.status(404).json(errors);
+      }
+      res.json(profiles);
+    })
+    .catch(err => res.status(404).json(err));
+});
+
+// @route   GET /api/profile/handle/:handle
+// @desc    Get Profile by Handle
+// @access  Public
+router.get('/handle/:handle', (req, res) => {
+  const errors = {};
+
+  Profile.findOne({ handle: req.params.handle })
+    .populate('user', ['name', 'avatar'])
+    .then(profile => {
+      if (!profile) {
+        errors.profile = 'There is no Profile with this handle.';
+        res.status(404).json(errors);
+      }
+      res.json(profile);
+    })
+    .catch(err => res.status(404).json(err));
+});
+
+// @route   GET /api/profile/user/:user_id
+// @desc    Get Profile by user_id
+// @access  Public
+router.get('/user/:user_id', (req, res) => {
+  const errors = {};
+
+  Profile.findOne({ user: req.params.user_id })
+    .populate('user', ['name', 'avatar'])
+    .then(profile => {
+      if (!profile) {
+        errors.profile = 'There is no Profile with this user_id.';
+        res.status(404).json(errors);
+      }
+      res.json(profile);
+    })
+    .catch(() => {
+      errors.profile = 'There is no Profile with this user_id.';
+      res.status(404).json(errors);
+    });
+});
+
 // @route   POST /api/profile
 // @desc    Create OR Edit User Profile
 // @access  Private
@@ -79,7 +136,9 @@ router.post(
     }
     // Split Skills into an Array
     if (typeof req.body.skills !== 'undefined') {
-      profileFields.skills = req.body.skills.split(',');
+      profileFields.skills = req.body.skills
+        .split(',')
+        .map(skill => skill.trim());
     }
 
     // Social
