@@ -288,9 +288,19 @@ router.delete(
   (req, res) => {
     Profile.findOne({ user: req.user.id }).then(profile => {
       // First find the Index of the Education we want to delete from Education Array.
+
+      const removeIndex = profile.education
+        .map(item => item.id)
+        .indexOf(req.params.exp_id);
+
+      /** OR **/
+      /** ******* 
+
       const removeIndex = profile.education.findIndex(
         item => item.id === req.params.exp_id
       );
+
+      * ******* **/
 
       // Remove the Education from the array using splice.
       profile.education.splice(removeIndex, 1);
