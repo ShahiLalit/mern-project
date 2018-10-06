@@ -254,4 +254,35 @@ router.post(
   }
 );
 
+// @route   DELETE /api/profile/experience/:exp_id
+// @desc    Add User Experience
+// @access  Private
+router.delete(
+  '/experience/:exp_id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    // const { errors, isValid } = validateExperienceInput(req.body);
+
+    // // Check Validation
+    // if (!isValid) {
+    //   return res.status(400).json(errors);
+    // }
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      // First find the Index of the Experience we want to delete from Experience Array.
+      const removeIndex = profile.experience.findIndex(
+        item => item.id === req.params.exp_id
+      );
+
+      // Remove the experience from the array using splice.
+      profile.experience.splice(removeIndex, 1);
+
+      // Save the profile
+      profile
+        .save()
+        .then(profile => res.status(200).json(profile))
+        .catch(err => res.status(404).json(err));
+    });
+  }
+);
+
 module.exports = router;
