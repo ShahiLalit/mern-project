@@ -255,18 +255,12 @@ router.post(
 );
 
 // @route   DELETE /api/profile/experience/:exp_id
-// @desc    Add User Experience
+// @desc    Delete User Experience
 // @access  Private
 router.delete(
   '/experience/:exp_id',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    // const { errors, isValid } = validateExperienceInput(req.body);
-
-    // // Check Validation
-    // if (!isValid) {
-    //   return res.status(400).json(errors);
-    // }
     Profile.findOne({ user: req.user.id }).then(profile => {
       // First find the Index of the Experience we want to delete from Experience Array.
       const removeIndex = profile.experience.findIndex(
@@ -285,4 +279,28 @@ router.delete(
   }
 );
 
+// @route   DELETE /api/profile/education/:edu_id
+// @desc    Delete User Education
+// @access  Private
+router.delete(
+  '/education/:edu_id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      // First find the Index of the Education we want to delete from Education Array.
+      const removeIndex = profile.education.findIndex(
+        item => item.id === req.params.exp_id
+      );
+
+      // Remove the Education from the array using splice.
+      profile.education.splice(removeIndex, 1);
+
+      // Save the profile
+      profile
+        .save()
+        .then(profile => res.status(200).json(profile))
+        .catch(err => res.status(404).json(err));
+    });
+  }
+);
 module.exports = router;
