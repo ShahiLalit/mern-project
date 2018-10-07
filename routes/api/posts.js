@@ -211,16 +211,16 @@ router.delete(
         );
 
         if (commentToDelete.length === 0) {
-          // If Yes, the user has already commentd the post, send 400 status
+          // If this is true, comment does not exist. Send 404 status.
           return res
-            .status(400)
+            .status(404)
             .json({ error: 'You have not commentd the post yet' });
         }
 
-        // Get Index of the user id
+        // Get Index of the comment id to remove
         const removeIndex = post.comments
-          .map(comment => comment.user.toString())
-          .indexOf(req.user.id);
+          .map(comment => comment._id.toString())
+          .indexOf(req.params.comment_id);
 
         // remove the user id from the comments array using splice
         post.comments.splice(removeIndex, 1);
