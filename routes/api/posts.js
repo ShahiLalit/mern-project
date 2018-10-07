@@ -148,7 +148,7 @@ router.post(
 
           // Get Index of the user id
           const removeIndex = post.likes
-            .map(item => item.user.toString())
+            .map(like => like.user.toString())
             .indexOf(req.user.id);
 
           // remove the user id from the likes array using splice
@@ -189,6 +189,43 @@ router.post(
         post.comments.unshift(newComment);
 
         // Save the post
+        post.save().then(post => res.status(200).json(post));
+      })
+      .catch(() => res.status(404).json({ postnotfound: 'No post found' }));
+  }
+);
+
+// @route   DELETE /api/posts/comment/:id/:comment_id
+// @desc    Deleting a comment on the Posts
+// @access  Private
+
+router.delete(
+  '/comment/:id/:comment_id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Post.findById(req.params.id)
+      .then(post => {
+        // Get Index of the comment id
+        const commentToDelete = post.comments.filter(
+          comment => comment._id.toString() === req.params.comment_id
+        );
+
+        if (commentToDelete.length === 0) {
+          // If Yes, the user has already commentd the post, send 400 status
+          return res
+            .status(400)
+            .json({ error: 'You have not commentd the post yet' });
+        }
+
+        // Get Index of the user id
+        const removeIndex = post.comments
+          .map(comment => comment.user.toString())
+          .indexOf(req.user.id);
+
+        // remove the user id from the comments array using splice
+        post.comments.splice(removeIndex, 1);
+
+        // Save the post after being uncommentd by the user
         post.save().then(post => res.status(200).json(post));
       })
       .catch(() => res.status(404).json({ postnotfound: 'No post found' }));
