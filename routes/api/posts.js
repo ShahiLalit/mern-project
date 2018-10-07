@@ -91,5 +91,37 @@ router.delete(
   }
 );
 
+// @route   POST /api/posts/like/:id
+// @desc    Like a single Post
+// @access  Private
+
+router.post(
+  '/like/:id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    User.findOne({ _id: req.user.id }).then(() => {
+      Post.findById(req.params.id)
+        .then(post => {
+          // Find if the user logged in, has liked the post already.
+          const userLiked = post.likes.filter(
+            like => like.user.toString() === req.user.id
+          );
+
+          if (userLiked.length > 0) {
+            // If Yes, the user has already liked the post, send 400 status
+            return res.status(400).json({ error: 'Already Liked!' });
+          }
+
+          // If not, add the user liked the post to the array.
+          post.likes.unshift({ user: req.user.id });
+
+          // Save the post after being liked by the user
+          post.save().then(post => res.status(200).json(post));
+        })
+        .catch(() => res.status(404).json({ postnotfound: 'No post found' }));
+    });
+  }
+);
+
 // Export the Routes
 module.exports = router;
