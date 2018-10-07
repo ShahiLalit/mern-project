@@ -162,7 +162,7 @@ router.post(
   }
 );
 
-// @route   POST /api/posts/comment
+// @route   POST /api/posts/comment/:id
 // @desc    Entering a comment on the Posts
 // @access  Private
 
