@@ -162,5 +162,38 @@ router.post(
   }
 );
 
+// @route   POST /api/posts/comment
+// @desc    Entering a comment on the Posts
+// @access  Private
+
+router.post(
+  '/comment/:id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validatePostInput(req.body);
+
+    // Check Validation
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+    Post.findById(req.params.id)
+      .then(post => {
+        const newComment = new Post({
+          text: req.body.text,
+          name: req.body.name,
+          avatar: req.body.avatar,
+          user: req.user.id
+        });
+
+        // Add to comments array
+        post.comments.unshift(newComment);
+
+        // Save the post
+        post.save().then(post => res.status(200).json(post));
+      })
+      .catch(() => res.status(404).json({ postnotfound: 'No post found' }));
+  }
+);
+
 // Export the Routes
 module.exports = router;
