@@ -4,7 +4,10 @@
   "description": "Developers can connect to each other",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "client-install": "yarn --prefix client",
+    "server": "nodemon server.js",
+    "client": "cd client && yarn start",
+    "dev": "concurrently -k \"yarn run server\" \"yarn run client\""
   },
   "repository": {
     "type": "git",
@@ -20,6 +23,7 @@
     "babel-eslint": "^10.0.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "concurrently": "^4.0.1",
     "express": "^4.16.3",
     "gravatar": "^1.6.0",
     "jsonwebtoken": "^8.3.0",
