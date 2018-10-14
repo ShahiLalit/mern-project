@@ -1,4 +1,4 @@
-import { CATCH_ERROR } from './../actions/actionTypes/auth';
+import { CATCH_ERROR } from './../actions/types/actionTypes';
 
 const initialState = {};
 

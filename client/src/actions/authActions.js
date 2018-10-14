@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CATCH_ERROR, SET_CURRENT_USER } from './actionTypes/auth';
+import { CATCH_ERROR, SET_CURRENT_USER } from './types/actionTypes';
 import setAuthToken from '../utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
 
