@@ -1,4 +1,4 @@
-import { TEST_DISPATCH_ACTION } from './../actions/actionTypes/auth';
+import { REGISTER_NEW_USER } from './../actions/actionTypes/auth';
 
 const initialState = {
   isAuthenticated: false,
@@ -7,7 +7,7 @@ const initialState = {
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case TEST_DISPATCH_ACTION:
+    case REGISTER_NEW_USER:
       return {
         ...state,
         isAuthenticated: true,

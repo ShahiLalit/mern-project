@@ -1,8 +1,14 @@
-import { TEST_DISPATCH_ACTION } from './actionTypes/auth';
+import axios from 'axios';
+import { CATCH_ERROR } from './actionTypes/auth';
 
 export const registerUser = userData => dispatch => {
-  return dispatch({
-    type: TEST_DISPATCH_ACTION,
-    payload: userData
-  });
+  axios
+    .post('/api/users/register', userData)
+    .then(res => console.log(res.data))
+    .catch(err =>
+      dispatch({
+        type: CATCH_ERROR,
+        payload: err.response.data
+      })
+    );
 };
