@@ -17,15 +17,18 @@ export class Login extends Component {
   onSubmit = e => {
     e.preventDefault();
 
-    const user = {
+    const userData = {
       email: this.state.email,
       password: this.state.password
     };
 
-    this.props.loginUser(user, this.props.history);
+    this.props.loginUser(userData);
   };
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
@@ -85,10 +88,12 @@ export class Login extends Component {
 
 Login.propTypes = {
   loginUser: PropTypes.func.isRequired,
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
+  auth: state.auth,
   errors: state.errors
 });
 
