@@ -3,7 +3,8 @@ import axios from 'axios';
 import {
   GET_PROFILE,
   PROFILE_LOADING,
-  CLEAR_CURRENT_PROFILE
+  CLEAR_CURRENT_PROFILE,
+  CATCH_ERROR
 } from './types/actionTypes';
 
 export const getCurrentProfile = () => dispatch => {
@@ -20,6 +21,20 @@ export const getCurrentProfile = () => dispatch => {
       dispatch({
         type: GET_PROFILE,
         payload: {}
+      })
+    );
+};
+
+// Create a Profile
+
+export const createProfile = (profileData, history) => dispatch => {
+  axios
+    .post('/api/profile', profileData)
+    .then(res => history.push('/dashboard'))
+    .catch(err =>
+      dispatch({
+        type: CATCH_ERROR,
+        payload: err.response.data
       })
     );
 };
