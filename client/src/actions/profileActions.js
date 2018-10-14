@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-import { GET_PROFILE, PROFILE_LOADING } from './types/actionTypes';
+import {
+  GET_PROFILE,
+  PROFILE_LOADING,
+  CLEAR_CURRENT_PROFILE
+} from './types/actionTypes';
 
 export const getCurrentProfile = () => dispatch => {
   dispatch(getProfileLoader());
@@ -20,8 +24,16 @@ export const getCurrentProfile = () => dispatch => {
     );
 };
 
+// Profile Loading
 export const getProfileLoader = () => dispatch => {
   return {
     type: PROFILE_LOADING
+  };
+};
+
+// Clear Profile after logout
+export const clearCurrentProfile = () => dispatch => {
+  return {
+    type: CLEAR_CURRENT_PROFILE
   };
 };
