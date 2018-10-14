@@ -26,14 +26,14 @@ export const getCurrentProfile = () => dispatch => {
 
 // Profile Loading
 export const getProfileLoader = () => dispatch => {
-  return {
+  return dispatch({
     type: PROFILE_LOADING
-  };
+  });
 };
 
 // Clear Profile after logout
 export const clearCurrentProfile = () => dispatch => {
-  return {
+  return dispatch({
     type: CLEAR_CURRENT_PROFILE
-  };
+  });
 };
