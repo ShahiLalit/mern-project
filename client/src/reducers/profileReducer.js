@@ -1,8 +1,8 @@
 import { GET_PROFILE, PROFILE_LOADING } from './../actions/types/actionTypes';
 
 const initialState = {
-  profile: {},
-  profiles: [],
+  profile: null,
+  profiles: null,
   loading: false
 };
 
